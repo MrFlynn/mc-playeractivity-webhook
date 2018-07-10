@@ -1,0 +1,5 @@
+[App]
+UpdateFrequency = 7
+RootDirectory = /server
+Threshold = 30
+WebhookURL = example.com/webhook
