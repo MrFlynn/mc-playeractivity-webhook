@@ -31,7 +31,7 @@ class ServerParse:
 
         # Get the line with the level name and extract the name.
         level_name_line = list(filter(lambda x: 'level-name' in x, lines))
-        return level_name_line[0].split('=').strip()
+        return level_name_line[0].split('=')[1].strip()
 
     def _read_whitelist(self, filename: str = 'whitelist.json') -> object:
         """Reads the whitelist JSON file into a python dictionary and stores
@@ -78,6 +78,9 @@ class ServerParse:
         :param uuid: UUID of the user to look up.
         :return: username corresponding to `uuid`.
         """
-        matching_uuid = list(
-            filter(lambda x: x['uuid'] == uuid, self.whitelist))
-        return matching_uuid[0]
+        try:
+            matching_uuid = list(
+                filter(lambda x: x['uuid'] == uuid, self.whitelist))
+            return matching_uuid[0]
+        except:
+            return ""
