@@ -1,5 +1,6 @@
 import os
 import time
+import json
 import requests
 import schedule
 import configparser
@@ -19,17 +20,18 @@ def reload_and_push(url: str,
     server_data.reload()
     flagged_players = player_data.run()
 
-    embedded_message = '`**Format:** __Username__: __Last Logged In__`\n\n'
+    embedded_message = '**Format:** __Username__: __Last Logged In__\n\n'
     for player in flagged_players:
-        embedded_message += f'`- {player[0]}: {player[1]}`\n'
+        if player[0]:
+            embedded_message += f'- `{player[0]["name"]}: {player[1]}`\n'
 
-    message = {'username': 'Server Info Bot', 'embeds': [embedded_message]}
-    requests.post(url, json=message)
+    message = {'username': 'Server Info Bot', 'content': embedded_message[:1999]}
+    requests.post(url, data=json.dumps(message), headers={'Content-Type': 'application/json'})
 
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
-    config.read_file(os.getenv('CONFIG_FILE'))
+    config.read(os.getenv('CONFIG_FILE'))
 
     # Instantiate data processing objects
     server_data = ServerParse(config.get('App', 'RootDirectory'))
@@ -38,10 +40,12 @@ if __name__ == '__main__':
 
     schedule.every(int(config.get('App', 'UpdateFrequency'))).days.do(
         reload_and_push,
+        config.get('App', 'WebhookURL'),
         server_data,
-        player_data,
-        config.get('App', 'WebhookURL'))
+        player_data
+        )
 
     while True:
         schedule.run_pending()
         time.sleep(1)
+
