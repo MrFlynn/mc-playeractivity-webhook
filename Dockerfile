@@ -3,13 +3,15 @@ LABEL MAINTAINER="Nick Pleatsikas <nick@pleatsikas.me>"
 
 # Install Python 3 and update pip.
 RUN apk update \
-    && apk install python3 \
-    && pip3 install --upgrade pip \
-    && pip3 install -r requirements.txt
+    && apk add python3 \
+    && pip3 install --upgrade pip
 
 # Copy contents and enter working directory.
 COPY . /app
 WORKDIR /app
+
+# Install application requirements.
+RUN pip3 install -r requirements.txt
 
 # Volume for accessing server configurations and files.
 VOLUME [ "/server" ]
