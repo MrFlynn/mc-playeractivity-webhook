@@ -17,6 +17,5 @@ VOLUME [ "/server" ]
 # Environment variable corresponding name of configuration file.
 ENV CONFIG_FILE="config.ini"
 
-# Entrypoint and command to run application.
-ENTRYPOINT [ "python3" ]
-CMD [ "main.py" ]
+# Command to run application.
+CMD [ "python3", "main.py" ]
