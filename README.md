@@ -13,10 +13,11 @@ Docker, keep the `RootDirectory` setting the same.
 3. If using docker, just run these commands:
 ```bash
 $ docker build -t mc-playeractivity-webhook:latest .
-$ docker run -v /path/to/server:/server mc-playeractivity-webhook:latest
+$ docker run -v /path/to/server:/server mc-playeractivity-webhook:latest -d
 ```
 4. If not using Docker, run these commands:
 ```bash
+$ pip3 install -r requirements.txt
 $ export CONFIG_FILE="config.ini"
 $ python3 main.py
 ```
