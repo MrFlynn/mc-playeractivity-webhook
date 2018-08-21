@@ -26,7 +26,7 @@ class PlayerFilter:
         :return: list of tuples, each with player UUIDs and last active time.
         """
         full_player_list = self.server_data.get_uuids_and_mtime()
-        cutoff_date = timedelta(days=-self.num_days)  # Date -n days ago.
+        cutoff_date = datetime.today() - timedelta(days=self.num_days)
 
         return list(filter(
             lambda x: datetime.fromtimestamp(x[1]) < cutoff_date,
@@ -39,7 +39,7 @@ class PlayerFilter:
         """
         # List of UUIDs of players who have playerdata files.
         # pylint: disable=E1136
-        player_uuids = list(zip(*self.server_data.get_uuids_and_mtime)[0])
+        player_uuids = list(zip(*self.server_data.get_uuids_and_mtime()))[0]
 
         all_player_uuids = []
         for player in self.server_data.whitelist:
